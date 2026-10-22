@@ -4,7 +4,7 @@
    <state>stable</state>
    <description>
       <short>
-         <en><![CDATA[Filterable requesters / observers / assignees in the GLPI 11 high-level API.]]></en>
+         <en><![CDATA[Filterable requesters / observers / assignees in the GLPI high-level API.]]></en>
       </short>
       <long>
          <en><![CDATA[Adds requesters, observers, assignees (users) and requester_groups, observer_groups, assignee_groups to the Ticket, Change and Problem schemas of the high-level REST API as real SQL joins, so RSQL filters such as assignees.id==42 or requesters.username==jdoe work server-side. Works around glpi-project/glpi#20743.]]></en>
@@ -18,6 +18,10 @@
       <author>hlapiactors contributors</author>
    </authors>
    <versions>
+      <version>
+         <num>2.0.0</num>
+         <compatibility>~12.0</compatibility>
+      </version>
       <version>
          <num>1.2.0</num>
          <compatibility>~11.0</compatibility>

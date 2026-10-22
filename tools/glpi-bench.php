@@ -23,7 +23,7 @@ $anyPlugin = false;
 foreach ($cases as $label => [$schemaName, $params, $expected]) {
   $_GET = ['filter' => $params['filter'] ?? '', 'sort' => $params['sort'] ?? ''];
   $_SERVER['REQUEST_URI'] = '/api.php/x';
-  $schema = $controller[$schemaName]::getKnownSchemas('2.3')[$schemaName];
+  $schema = $controller[$schemaName]::getKnownSchemas($argv[1] ?? '2.3')[$schemaName];
   $needs = preg_match('/(assignees|validations|tasks|followups|pending_reasons|groups)\./', $params['filter'] ?? '');
   $has = isset($schema['properties']['assignees']) || isset($schema['properties']['groups']);
   if ($needs && !$has) { printf("%-40s n/a (needs plugin)  expected total=%s\n", $label, $expected); continue; }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * HL API Actors — filterable ticket actors for the GLPI 11 high-level API.
+ * HL API Actors — filterable ticket actors for the GLPI 12 high-level API (v2.3 and v3.0).
  *
  * The core API exposes requesters / observers / assignees only as the computed
  * `team` property, which cannot be used in RSQL filters (glpi-project/glpi#20743).
@@ -11,15 +11,14 @@
 
 use Glpi\Plugin\Hooks;
 
-define('PLUGIN_HLAPIACTORS_VERSION', '1.2.0');
-define('PLUGIN_HLAPIACTORS_MIN_GLPI', '11.0.0');
-define('PLUGIN_HLAPIACTORS_MAX_GLPI', '11.0.99');
+define('PLUGIN_HLAPIACTORS_VERSION', '2.0.0');
+define('PLUGIN_HLAPIACTORS_MIN_GLPI', '12.0.0');
+define('PLUGIN_HLAPIACTORS_MAX_GLPI', '12.0.99');
 
 function plugin_init_hlapiactors(): void
 {
     global $PLUGIN_HOOKS;
 
-    $PLUGIN_HOOKS['csrf_compliant']['hlapiactors'] = true;
     $PLUGIN_HOOKS[Hooks::REDEFINE_API_SCHEMAS]['hlapiactors'] = 'plugin_hlapiactors_redefine_api_schemas';
 }
 
