@@ -42,6 +42,13 @@ they pay nothing; only the requests that use actor filters carry the extra
 joins. Consequence: a list response contains the `assignees` / `requesters` …
 arrays only when you filtered or sorted by them — use `team` otherwise.
 
+**Explicit opt-in (since 2.1.0):** the `X-HLAPIActors` header adds the
+properties to any request, without filtering or sorting by them. `actors` adds
+only `requesters`, `assignees`, `observers` and their `*_groups` (cheap joins);
+`1` adds everything, including the one-to-many `tasks`, `followups`,
+`validations` and `pending_reasons`. API v3 clients use `actors` to read the
+actors' real names: in v3 the core `team` items carry only the user id and login.
+
 ## Examples
 
 ```

@@ -76,10 +76,14 @@ final class ApiSchemas
         if ($controller !== self::ITIL_CONTROLLER && $controller !== self::ADMIN_CONTROLLER) {
             return $data;
         }
-        if (!self::requested()) {
+        $mode = self::requestedMode();
+        if ($mode === 'none') {
             return $data;
         }
         if ($controller === self::ADMIN_CONTROLLER) {
+            if ($mode !== 'all') {
+                return $data;
+            }
             if (isset($data['schemas']['User']['properties'])) {
                 $data['schemas']['User']['properties']['groups'] ??= self::joined('glpi_groups', 'groups_id', 'glpi_groups_users', 'users_id', [
                     'id' => self::INT + ['description' => 'Group ID'],
@@ -106,6 +110,11 @@ final class ApiSchemas
                     'name' => self::STR,
                     'completename' => self::STR,
                 ], 'Group', "Groups with the {$prefix} role. Added by the hlapiactors plugin.", ['type' => $type]);
+            }
+            if ($mode !== 'all') {
+                // Actors only: skip the one-to-many joins below, they multiply the aggregated rows.
+                unset($props);
+                continue;
             }
             if ($validation_table !== null) {
                 $props['validations'] ??= self::rows($validation_table, $fkey, [
@@ -153,12 +162,25 @@ final class ApiSchemas
     /** Add the properties only when the current request uses them (see class doc). */
     public static function requested(): bool
     {
+        return self::requestedMode() !== 'none';
+    }
+
+    /**
+     * Which properties the current request needs: 'all', 'actors' (requesters, assignees,
+     * observers and their groups only) or 'none'.
+     *
+     * The X-HLAPIActors header is an explicit opt-in for reads that need the actors without
+     * filtering or sorting by them (e.g. v3 clients replacing the computed `team`, which has
+     * no real names): `1` adds everything, `actors` only the actors.
+     */
+    public static function requestedMode(): string
+    {
         if (getenv('HLAPIACTORS_ALWAYS') === '1') {
-            return true;
+            return 'all';
         }
         $uri = $_SERVER['REQUEST_URI'] ?? '';
         if (preg_match('~/api\.php(/v[\d.]+)?/doc(\.json)?(\?|$)~', $uri)) {
-            return true;
+            return 'all';
         }
         $haystack = ($_GET['filter'] ?? '') . ' ' . ($_GET['sort'] ?? '');
         if (trim($haystack) === '' && $uri !== '') {
@@ -166,10 +188,14 @@ final class ApiSchemas
         }
         foreach (self::propertyNames() as $name) {
             if (str_contains($haystack, $name . '.')) {
-                return true;
+                return 'all';
             }
         }
-        return false;
+        return match ($_SERVER['HTTP_X_HLAPIACTORS'] ?? '') {
+            '1' => 'all',
+            'actors' => 'actors',
+            default => 'none',
+        };
     }
 
     /** Array of target-table rows reached through a link table (main → link → target). */

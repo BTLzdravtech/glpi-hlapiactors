@@ -11,7 +11,7 @@
 
 use Glpi\Plugin\Hooks;
 
-define('PLUGIN_HLAPIACTORS_VERSION', '2.0.0');
+define('PLUGIN_HLAPIACTORS_VERSION', '2.1.0');
 define('PLUGIN_HLAPIACTORS_MIN_GLPI', '12.0.0');
 define('PLUGIN_HLAPIACTORS_MAX_GLPI', '12.0.99');
 
