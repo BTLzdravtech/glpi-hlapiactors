@@ -8,7 +8,12 @@
 > that work. Treat it as you would any other third-party plugin: read it before
 > you install it, and report problems in the issue tracker.
 
-Filterable ticket actors, approvals, tasks, followups, pending reasons and user groups for the **GLPI 11 high-level REST API**.
+Filterable ticket actors, approvals, tasks, followups, pending reasons and user groups for the **GLPI high-level REST API**.
+
+| Plugin | GLPI | Branch |
+|---|---|---|
+| 2.x | 12.0 | `main` |
+| 1.x | 11.0 | [`glpi-11`](../../tree/glpi-11) |
 
 The core API exposes requesters, observers and assignees only through the
 computed `team` property, which the RSQL filter engine rejects — there is no
@@ -69,10 +74,12 @@ The properties also appear in each returned item and in `/api.php/doc.json`.
 ```
 cd /var/www/glpi/plugins          # or the marketplace directory
 git clone https://github.com/BTLzdravtech/glpi-hlapiactors.git hlapiactors
+# GLPI 11: git clone -b glpi-11 https://github.com/BTLzdravtech/glpi-hlapiactors.git hlapiactors
 ```
 
 Then Setup → Plugins → install and enable *HL API Actors*. The directory name
-must be `hlapiactors`. Requires GLPI 11.0.x.
+must be `hlapiactors`. Requires GLPI 12.0.x; for GLPI 11.0.x use the `glpi-11`
+branch.
 
 ## Performance
 
@@ -116,7 +123,7 @@ docker run -d --name glpitest-db --network glpitest -e MARIADB_ROOT_PASSWORD=roo
   -e MARIADB_DATABASE=glpi -e MARIADB_USER=glpi -e MARIADB_PASSWORD=glpi mariadb:11
 docker run -d --name glpitest --network glpitest -e GLPI_DB_HOST=glpitest-db -e GLPI_DB_NAME=glpi \
   -e GLPI_DB_USER=glpi -e GLPI_DB_PASSWORD=glpi -e GLPI_INSTALL_MODE=CONTAINER \
-  -v "$PWD:/var/www/glpi/plugins/hlapiactors:ro" glpi/glpi:11.0.8
+  -v "$PWD:/var/www/glpi/plugins/hlapiactors:ro" glpi/glpi:12.0.1
 # wait for the auto-install, then:
 docker exec glpitest php bin/console --allow-superuser plugin:install hlapiactors --username=glpi
 docker exec glpitest php bin/console --allow-superuser plugin:activate hlapiactors
