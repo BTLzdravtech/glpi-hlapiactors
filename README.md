@@ -10,6 +10,11 @@
 
 Filterable ticket actors, approvals, tasks, followups, pending reasons and user groups for the **GLPI 11 high-level REST API**.
 
+| Plugin | GLPI | Branch |
+|---|---|---|
+| 2.x | 12.0 | [`main`](../../tree/main) |
+| 1.x | 11.0 | `glpi-11` |
+
 The core API exposes requesters, observers and assignees only through the
 computed `team` property, which the RSQL filter engine rejects — there is no
 way to ask the API for "tickets assigned to user 42"
@@ -61,11 +66,11 @@ The properties also appear in each returned item and in `/api.php/doc.json`.
 
 ```
 cd /var/www/glpi/plugins          # or the marketplace directory
-git clone https://github.com/BTLzdravtech/glpi-hlapiactors.git hlapiactors
+git clone -b glpi-11 https://github.com/BTLzdravtech/glpi-hlapiactors.git hlapiactors
 ```
 
 Then Setup → Plugins → install and enable *HL API Actors*. The directory name
-must be `hlapiactors`. Requires GLPI 11.0.x.
+must be `hlapiactors`. Requires GLPI 11.0.x; for GLPI 12 use the `main` branch.
 
 ## Performance
 
